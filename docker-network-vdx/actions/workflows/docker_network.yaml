@@ -1,0 +1,99 @@
+version: '2.0'
+
+docker.docker-network-tor:
+    description: Workflow to add TOR VLAN interfaces for docker MACVLAN Networks.
+    type: direct
+    input:
+        - rbridge_id
+        - subnet
+        - vlan
+        - channel
+        - host
+        - username
+        - password
+    tasks:
+        add_ve_interface:
+            action: vdx.interface_vlan_interface_vlan_vlan_name
+            input:
+                name: <% $.vlan %>
+                vlan_name: "Docker Network"
+                host: <% $.host %>
+                username: <% $.username %>
+                password: <% $.password %>
+            publish:
+                status_message: "Successfully added VE Interface"
+            on-success:
+                - add_global_ve_int
+            on-error:
+                - notify_fail
+        add_global_ve_int:
+            action: vdx.interface_vlan_interface_ve_gve_name
+            input:
+                gve_name: <% $.vlan %>
+                host: <% $.host %>
+                username: <% $.username %>
+                password: <% $.password %>
+            publish:
+                status_message: "Successfully added global VE Interface"
+            on-success:
+                - set_ve_ip
+            on-error:
+                - notify_fail
+        set_ve_ip:
+            action: vdx.rbridge_id_interface_ve_ip_ip_config_address_address
+            input:
+                rbridge_id: <% $.rbridge_id %>
+                name: <% $.vlan %>
+                address: <% $.subnet %>
+                host: <% $.host %>
+                username: <% $.username %>
+                password: <% $.password %>
+            publish:
+                status_message: "Successfully set VE IP Address"
+            on-success:
+                - no_shut_ve
+            on-error:
+                - notify_fail
+        no_shut_ve:
+            action: vdx.rbridge_id_interface_ve_shutdown
+            input:
+                rbridge_id: <% $.rbridge_id %>
+                name: <% $.vlan %>
+                delete_shutdown: True
+                host: <% $.host %>
+                username: <% $.username %>
+                password: <% $.password %>
+            publish:
+                status_message: "Successfully noshut VE Interface"
+            on-success:
+                - no_shut_ve_global
+            on-error:
+                - notify_fail
+        no_shut_ve_global:
+            action: vdx.interface_vlan_interface_ve_global_ve_shutdown
+            input:
+                gve_name: <% $.vlan %>
+                delete_global_ve_shutdown: True
+                host: <% $.host %>
+                username: <% $.username %>
+                password: <% $.password %>
+            publish:
+                status_message: "Successfully noshut VE Interface"
+            on-success:
+                - notify_success
+            on-error:
+                - notify_fail
+        notify_success:
+            action: chatops.post_message
+            input:
+                channel: <% $.channel %>
+                message: "Docker network has been created on TOR."
+            publish:
+                status_message: "Sent success message to chatops."
+        notify_fail:
+            action: chatops.post_message
+            input:
+                channel: <% $.channel %>
+                message: "Failed to create docker network on TOR."
+            publish:
+                status_message: "Sent fail message to chatops."

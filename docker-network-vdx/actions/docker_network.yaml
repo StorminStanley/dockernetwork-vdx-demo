@@ -1,0 +1,29 @@
+---
+description: Add Docker networks to TOR Vlan Interface.
+enabled: true
+entry_point: workflows/docker_network.yaml
+name: docker-network-tor
+pack: docker
+parameters:
+  rbridge_id:
+    required: true
+    type: string
+  subnet:
+    required: true
+    type: string
+  vlan:
+    required: true
+    type: string
+  channel:
+    required: true
+    type: string
+  host:
+    required: true
+    type: string
+  username:
+    required: true
+    type: string
+  password:
+    required: true
+    type: string
+runner_type: mistral-v2
