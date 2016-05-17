@@ -1,0 +1,27 @@
+---
+  class_name: "DockerEvent"
+  entry_point: "dockerevent.py"
+  description: "Docker Event API Sensor for detecting network events."
+  trigger_types:
+    -
+      name: "NetworkEvent"
+      description: "Docker network was created."
+      payload_schema:
+        type: "object"
+        properties:
+          action:
+            type: "string"
+          rbridge:
+            type: "string"
+          subnet:
+            type: "string"
+          vlan:
+            type: "string"
+          channel:
+            type: "string"
+          host:
+            type: "string"
+          username:
+            type: "string"
+          password:
+            type: "string"

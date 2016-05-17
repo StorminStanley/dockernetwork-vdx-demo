@@ -1,0 +1,57 @@
+---
+description: Auto generated action.
+enabled: true
+entry_point: rbridge_id_interface_ve_shutdown.py
+name: rbridge_id_interface_ve_shutdown
+parameters:
+  delete_interface:
+    description: Auto generated parameter.
+    position: 3
+    required: false
+    type: boolean
+  delete_name:
+    description: Auto generated parameter.
+    position: 4
+    required: false
+    type: boolean
+  delete_rbridge_id:
+    description: Auto generated parameter.
+    position: 5
+    required: false
+    type: boolean
+  delete_shutdown:
+    description: Auto generated parameter.
+    position: 1
+    required: false
+    type: boolean
+  delete_ve:
+    description: Auto generated parameter.
+    position: 2
+    required: false
+    type: boolean
+  host:
+    description: Auto generated parameter.
+    position: 7
+    required: true
+    type: string
+  name:
+    description: Auto generated parameter.
+    position: 0
+    required: true
+    type: string
+  password:
+    description: Auto generated parameter.
+    position: 9
+    required: true
+    type: string
+  rbridge_id:
+    description: Auto generated parameter.
+    position: 6
+    required: true
+    type: string
+  username:
+    description: Auto generated parameter.
+    position: 8
+    required: true
+    type: string
+runner_type: python-script
