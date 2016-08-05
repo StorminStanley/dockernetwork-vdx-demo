@@ -36,11 +36,11 @@ class DockerEvent(Sensor):
         #   # E.g.: dispatch('examples.foo_sensor', {'k1': 'stuff', 'k2': 'foo'})
         #   # trace_tag is a tag you would like to associate with the dispacthed TriggerInstance
         #   # Typically the trace_tag is unique and a reference to an external event.
-        r = requests.get('http://172.28.128.4:3376/events', stream=True)
+        r = requests.get('http://192.168.16.21:3376/events', stream=True)
         key = "REPLACE WITH SWARM KEY"
         for chunk in r.raw.read_chunked():
             event = json.loads(chunk)
-            netwk_data = requests.get('http://172.28.128.4:3376/networks/%s' % event['Actor']['Attributes']['name'])
+            netwk_data = requests.get('http://192.168.16.21:3376/networks/%s' % event['Actor']['Attributes']['name'])
             if event['Action'] == 'create':
                 netwk_data = json.loads(netwk_data.content)
                 vlan =  re.findall('eth[0-9]+\.([0-9]+)', netwk_data['Options']['parent'])[0]
@@ -53,7 +53,7 @@ class DockerEvent(Sensor):
                             host="10.254.4.105",
                             username="admin",
                             password="password")
-                trigger = 'docker.NetworkEvent'
+                trigger = 'docker-network-vdx.NetworkEvent'
                 trace_tag = uuid.uuid4().hex
                 self._sensor_service.dispatch(trigger=trigger, payload=data,
                         trace_tag=trace_tag)

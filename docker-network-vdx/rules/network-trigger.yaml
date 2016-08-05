@@ -1,13 +1,14 @@
 ---
   name: network-trigger
-  pack: docker
+  pack: docker-network-vdx
   description: Triggered when a docker network event happens.
   enabled: true
   trigger:
     parameters: {}
-    type: docker.NetworkEvent
+    type: docker-network-vdx.NetworkEvent
   criteria: {}
   action:
+    ref: "docker-network-vdx.docker-network-tor"
     parameters:
       channel: '{{trigger.channel}}'
       host: '{{trigger.host}}'
